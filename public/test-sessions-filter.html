@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Filtre Sessions - YEL'S FINANCES</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        .card-hover-shadow:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .form-select-sm {
+            min-width: 200px;
+        }
+        
+        .btn-reset-session {
+            border-color: #0d6efd;
+            color: #0d6efd;
+        }
+        
+        .btn-reset-session:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <h1 class="mb-4">Test du Filtre de Formation - Sessions</h1>
+        
+        <!-- Card -->
+        <div class="card">
+            <!-- Header -->
+            <div class="card-header card-header-content-md-between">
+                <div class="mb-2 mb-md-0 d-flex gap-2 align-items-end">
+                    <form class="d-flex gap-3 align-items-end" method="GET" action="#">
+                        <!-- Formation -->
+                        <div class="d-flex flex-column">
+                            <label class="form-label small fw-bold text-muted mb-1">Formation</label>
+                            <select class="form-select form-select-sm" name="formation_id" id="formationFilter">
+                                <option value="">Toutes les formations</option>
+                                <option value="1">Développement Web Full-Stack avec React & Node.js</option>
+                                <option value="2">Marketing Digital & Growth Hacking</option>
+                                <option value="3">Data Science avec Python & Machine Learning</option>
+                                <option value="4">Design UX/UI Avancé</option>
+                                <option value="5">Développement Mobile iOS & Android</option>
+                            </select>
+                        </div>
+
+                        <!-- Date de début -->
+                        <div class="d-flex flex-column">
+                            <label class="form-label small fw-bold text-muted mb-1">Date de début</label>
+                            <input type="date" class="form-control form-control-sm" name="start_date" id="startDate" value="">
+                        </div>
+
+                        <!-- Date de fin -->
+                        <div class="d-flex flex-column">
+                            <label class="form-label small fw-bold text-muted mb-1">Date de fin</label>
+                            <input type="date" class="form-control form-control-sm" name="end_date" id="endDate" value="">
+                        </div>
+
+                        <!-- Bouton Rechercher -->
+                        <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center">
+                            <i class="bi-search me-1"></i> Rechercher
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-primary btn-sm d-flex align-items-center btn-reset-session" onclick="resetFilters()">
+                            <i class="bi-arrow-clockwise me-1"></i> Réinitialiser
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- End Header -->
+
+            <!-- Zone de test -->
+            <div class="card-body">
+                <h5 class="card-title">Zone de test des filtres</h5>
+                <p>Testez les différents filtres ci-dessus pour voir comment ils fonctionnent.</p>
+                
+                <div id="filterOutput" class="alert alert-info">
+                    <strong>État actuel des filtres :</strong><br>
+                    Formation: Toutes les formations<br>
+                    Date début: Non définie<br>
+                    Date fin: Non définie
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Fonctionnalités testées :</h6>
+                        <ul>
+                            <li>✅ Filtre par formation (nouveau)</li>
+                            <li>✅ Filtre par date de début</li>
+                            <li>✅ Filtre par date de fin</li>
+                            <li>✅ Bouton de recherche</li>
+                            <li>✅ Bouton de réinitialisation</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Comment tester :</h6>
+                        <ol>
+                            <li>Sélectionnez une formation</li>
+                            <li>Choisissez des dates</li>
+                            <li>Cliquez sur "Rechercher"</li>
+                            <li>Vérifiez l'affichage des filtres</li>
+                            <li>Testez le bouton "Réinitialiser"</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Test des filtres de sessions
+        document.addEventListener('DOMContentLoaded', function() {
+            const formationFilter = document.getElementById('formationFilter');
+            const startDateFilter = document.getElementById('startDate');
+            const endDateFilter = document.getElementById('endDate');
+            const filterOutput = document.getElementById('filterOutput');
+
+            // Fonction pour mettre à jour l'affichage des filtres
+            function updateFilterOutput() {
+                const formation = formationFilter.value;
+                const startDate = startDateFilter.value;
+                const endDate = endDateFilter.value;
+
+                let formationText = 'Toutes les formations';
+                if (formation) {
+                    const selectedOption = formationFilter.options[formationFilter.selectedIndex];
+                    formationText = selectedOption.text;
+                }
+
+                filterOutput.innerHTML = `
+                    <strong>État actuel des filtres :</strong><br>
+                    Formation: ${formationText}<br>
+                    Date début: ${startDate || 'Non définie'}<br>
+                    Date fin: ${endDate || 'Non définie'}
+                `;
+
+                // Changer la couleur selon l'état des filtres
+                if (formation || startDate || endDate) {
+                    filterOutput.className = 'alert alert-success';
+                } else {
+                    filterOutput.className = 'alert alert-info';
+                }
+            }
+
+            // Écouteurs d'événements pour les filtres
+            if (formationFilter) {
+                formationFilter.addEventListener('change', updateFilterOutput);
+            }
+
+            if (startDateFilter) {
+                startDateFilter.addEventListener('change', updateFilterOutput);
+            }
+
+            if (endDateFilter) {
+                endDateFilter.addEventListener('change', updateFilterOutput);
+            }
+
+            // Fonction de réinitialisation
+            window.resetFilters = function() {
+                if (formationFilter) formationFilter.value = '';
+                if (startDateFilter) startDateFilter.value = '';
+                if (endDateFilter) endDateFilter.value = '';
+                updateFilterOutput();
+            };
+
+            // Gestion du formulaire
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formation = formationFilter.value;
+                    const startDate = startDateFilter.value;
+                    const endDate = endDateFilter.value;
+
+                    console.log('Filtres appliqués:', {
+                        formation_id: formation,
+                        start_date: startDate,
+                        end_date: endDate
+                    });
+
+                    // Simuler une recherche
+                    alert('Recherche effectuée avec les filtres sélectionnés !\n\n' +
+                          'Formation: ' + (formation ? formationFilter.options[formationFilter.selectedIndex].text : 'Toutes') + '\n' +
+                          'Date début: ' + (startDate || 'Non définie') + '\n' +
+                          'Date fin: ' + (endDate || 'Non définie'));
+                });
+            }
+
+            console.log('Test des filtres de sessions chargé avec succès!');
+        });
+    </script>
+</body>
+</html>
+
+

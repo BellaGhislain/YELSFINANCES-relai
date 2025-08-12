@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Filtres Admin - YEL'S FINANCES</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        .card-hover-shadow:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        #filtersPanel {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        
+        .btn-outline-primary {
+            color: #0d6efd;
+            border-color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <h1 class="mb-4">Test des Filtres Admin</h1>
+        
+        <!-- Filtres de recherche - Version collapsible -->
+        <div class="mb-3">
+          <!-- Bouton pour ouvrir/fermer les filtres -->
+          <div class="d-flex justify-content-end mb-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" id="toggleFiltersBtn">
+              <i class="bi-funnel me-1"></i>
+              <span id="toggleFiltersText">Afficher les filtres</span>
+            </button>
+          </div>
+
+          <!-- Panneau des filtres (caché par défaut) -->
+          <div class="card" id="filtersPanel" style="display: none;">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3 mb-3">
+                  <label for="formationFilter" class="form-label">Formation</label>
+                  <select class="form-select form-select-sm" id="formationFilter">
+                    <option value="">Toutes les formations</option>
+                    <option value="web-dev">Développement Web Full-Stack</option>
+                    <option value="data-science">Data Science</option>
+                    <option value="design">Design UX/UI</option>
+                    <option value="mobile">Développement Mobile</option>
+                    <option value="marketing">Marketing Digital</option>
+                  </select>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                  <label for="startDateFilter" class="form-label">Date de début</label>
+                  <input type="date" class="form-control form-control-sm" id="startDateFilter">
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                  <label for="endDateFilter" class="form-label">Date de fin</label>
+                  <input type="date" class="form-control form-control-sm" id="endDateFilter">
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                  <label for="sessionFilter" class="form-label">Session</label>
+                  <select class="form-select form-select-sm" id="sessionFilter" style="display: none;">
+                    <option value="">Toutes les sessions</option>
+                  </select>
+                  <div id="sessionFilterContainer" style="display: none;"></div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-12">
+                  <button type="button" class="btn btn-primary btn-sm" id="applyFiltersBtn">
+                    <i class="bi-search me-1"></i>
+                    Appliquer les filtres
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm ms-2" id="clearFiltersBtn">
+                    <i class="bi-x-circle me-1"></i>
+                    Effacer les filtres
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zone de test -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Zone de test</h5>
+                <p>Cliquez sur le bouton "Filtres" ci-dessus pour tester le déroulement du panneau.</p>
+                <div id="testOutput" class="alert alert-info">
+                    Aucun filtre appliqué
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Test des filtres admin
+        document.addEventListener('DOMContentLoaded', function() {
+            const formationFilter = document.getElementById('formationFilter');
+            const sessionFilter = document.getElementById('sessionFilter');
+            const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+            // Gestion du panneau collapsible
+            const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+            const filtersPanel = document.getElementById('filtersPanel');
+            const toggleFiltersText = document.getElementById('toggleFiltersText');
+
+            if (toggleFiltersBtn && filtersPanel) {
+                toggleFiltersBtn.addEventListener('click', function() {
+                    if (filtersPanel.style.display === 'none') {
+                        filtersPanel.style.display = 'block';
+                        toggleFiltersText.textContent = 'Masquer les filtres';
+                        toggleFiltersBtn.classList.remove('btn-outline-primary');
+                        toggleFiltersBtn.classList.add('btn-primary');
+                    } else {
+                        filtersPanel.style.display = 'none';
+                        toggleFiltersText.textContent = 'Afficher les filtres';
+                        toggleFiltersBtn.classList.remove('btn-primary');
+                        toggleFiltersBtn.classList.add('btn-outline-primary');
+                    }
+                });
+            }
+
+            if (formationFilter) {
+                formationFilter.addEventListener('change', function() {
+                    const selectedFormation = this.value;
+                    console.log('Formation sélectionnée:', selectedFormation);
+                });
+            }
+
+            if (applyFiltersBtn) {
+                applyFiltersBtn.addEventListener('click', function() {
+                    const selectedFormation = document.getElementById('formationFilter').value;
+                    const startDate = document.getElementById('startDateFilter').value;
+                    const endDate = document.getElementById('endDateFilter').value;
+
+                    const output = document.getElementById('testOutput');
+                    output.innerHTML = `
+                        <strong>Filtres appliqués :</strong><br>
+                        Formation: ${selectedFormation || 'Toutes'}<br>
+                        Date début: ${startDate || 'Non définie'}<br>
+                        Date fin: ${endDate || 'Non définie'}
+                    `;
+                    output.className = 'alert alert-success';
+                });
+            }
+
+            if (clearFiltersBtn) {
+                clearFiltersBtn.addEventListener('click', function() {
+                    // Réinitialiser tous les filtres
+                    if (formationFilter) formationFilter.value = '';
+                    if (document.getElementById('startDateFilter')) document.getElementById('startDateFilter').value = '';
+                    if (document.getElementById('endDateFilter')) document.getElementById('endDateFilter').value = '';
+                    if (sessionFilter) sessionFilter.value = '';
+                    
+                    const output = document.getElementById('testOutput');
+                    output.innerHTML = 'Aucun filtre appliqué';
+                    output.className = 'alert alert-info';
+                });
+            }
+
+            console.log('Test des filtres admin chargé avec succès!');
+        });
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,42 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  tags: [mnelectronix-shell]
+  before_script:
+    - mkdir -p ~/.ssh
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+  script:
+    - echo "Starting Laravel deployment on local server..."
+
+    # Go to your Nginx Laravel project folder
+    - mkdir -p /usr/share/nginx/html/${CI_PROJECT_NAME}
+    
+    # If folder is not a Git repo, clone it
+    - if [ ! -d "/usr/share/nginx/html/${CI_PROJECT_NAME}/.git" ]; then
+        git clone --branch $CI_COMMIT_REF_NAME $CI_REPOSITORY_URL /usr/share/nginx/html/${CI_PROJECT_NAME};
+      fi
+
+    - cd /usr/share/nginx/html/${CI_PROJECT_NAME}
+
+    # Reset to latest code
+    - git fetch origin $CI_COMMIT_REF_NAME
+    - git reset --hard origin/$CI_COMMIT_REF_NAME
+    - git clean -fd
+
+    # Install dependencies
+    - composer install --no-interaction --prefer-dist --optimize-autoloader
+
+    # Run migrations
+    - php artisan migrate --force
+
+    # Clear caches
+    - php artisan config:clear
+    - php artisan cache:clear
+    - php artisan route:clear
+    - php artisan view:clear
+
+    - echo "Deployment finished."
+  only:
+    - main

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Formatage Prix & Téléphone - YEL'S FINANCES</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .test-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+        }
+        
+        .price-example {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            border-left: 4px solid #198754;
+        }
+        
+        .phone-example {
+            background: #e7f3ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            border-left: 4px solid #0d6efd;
+        }
+        
+        .test-form {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .btn-test {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-test:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="text-center mb-4">
+            <i class="bi-currency-exchange text-success me-2"></i>
+            Test Formatage Prix & Téléphone
+        </h1>
+        
+        <div class="alert alert-info">
+            <i class="bi-info-circle me-2"></i>
+            Cette page teste le formatage automatique des montants et la validation des numéros de téléphone.
+        </div>
+        
+        <!-- Test du Formatage des Prix -->
+        <div class="test-section">
+            <h3><i class="bi-currency-euro me-2 text-success"></i>Test du Formatage des Prix</h3>
+            <p class="text-muted">Vérifiez que tous les montants sont automatiquement formatés avec des séparateurs de milliers</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Prix des Formations</h5>
+                    <div class="price-example">
+                        <strong>Développement Web:</strong> <span class="price-display" data-amount="899">899 €</span>
+                    </div>
+                    <div class="price-example">
+                        <strong>Marketing Digital:</strong> <span class="price-display" data-amount="1299">1299 €</span>
+                    </div>
+                    <div class="price-example">
+                        <strong>Data Science:</strong> <span class="price-display" data-amount="2499">2499 €</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Prix des Sessions</h5>
+                    <div class="price-example">
+                        <strong>Session Standard:</strong> <span class="session-price" data-amount="599">599 €</span>
+                    </div>
+                    <div class="price-example">
+                        <strong>Session Premium:</strong> <span class="session-price" data-amount="899">899 €</span>
+                    </div>
+                    <div class="price-example">
+                        <strong>Session VIP:</strong> <span class="session-price" data-amount="1499">1499 €</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <h5>Totaux</h5>
+                    <div class="price-example">
+                        <strong>Panier:</strong> <span class="cart-total" data-amount="1898">1898 €</span>
+                    </div>
+                    <div class="price-example">
+                        <strong>Commande:</strong> <span class="checkout-total" data-amount="2397">2397 €</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Autres Devises</h5>
+                    <div class="price-example">
+                        <strong>Dollars:</strong> <span class="price-display" data-amount="999" data-currency="$">999 $</span>
+                    </div>
+                    <div class="price-example">
+                        <strong>F CFA:</strong> <span class="price-display" data-amount="50000" data-currency="F CFA">50000 F CFA</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <button class="btn btn-success btn-test" onclick="testPriceFormatting()">
+                    <i class="bi-check-circle me-1"></i> Tester le Formatage
+                </button>
+                <button class="btn btn-outline-success btn-test" onclick="addRandomPrice()">
+                    <i class="bi-plus-circle me-1"></i> Ajouter un Prix
+                </button>
+            </div>
+        </div>
+        
+        <!-- Test de la Validation des Téléphones -->
+        <div class="test-section">
+            <h3><i class="bi-telephone me-2 text-primary"></i>Test de la Validation des Téléphones</h3>
+            <p class="text-muted">Testez la validation des numéros de téléphone (limite à 10 chiffres)</p>
+            
+            <div class="test-form">
+                <form id="phoneTestForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone1" class="form-label">Téléphone Formateur 1</label>
+                                <x-phone-input name="phone1" placeholder="690123456" :required="true" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone2" class="form-label">Téléphone Formateur 2</label>
+                                <x-phone-input name="phone2" placeholder="691234567" :required="false" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone3" class="form-label">Téléphone Contact</label>
+                                <x-phone-input name="phone3" placeholder="692345678" :required="true" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone4" class="form-label">Téléphone Secours</label>
+                                <x-phone-input name="phone4" placeholder="693456789" :required="false" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary btn-test">
+                            <i class="bi-check-circle me-1"></i> Valider les Téléphones
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-test" onclick="testPhoneValidation()">
+                            <i class="bi-telephone me-1"></i> Tester la Validation
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="mt-3">
+                <h6>Exemples de Numéros Valides :</h6>
+                <div class="phone-example">
+                    <strong>690123456</strong> - 10 chiffres ✓
+                </div>
+                <div class="phone-example">
+                    <strong>691234567</strong> - 10 chiffres ✓
+                </div>
+                <div class="phone-example">
+                    <strong>692345678</strong> - 10 chiffres ✓
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <h6>Exemples de Numéros Invalides :</h6>
+                <div class="phone-example" style="border-left-color: #dc3545;">
+                    <strong>69012345</strong> - 8 chiffres ✗ (trop court)
+                </div>
+                <div class="phone-example" style="border-left-color: #dc3545;">
+                    <strong>6901234567</strong> - 11 chiffres ✗ (trop long)
+                </div>
+                <div class="phone-example" style="border-left-color: #dc3545;">
+                    <strong>690-123-456</strong> - Contient des tirets ✗
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test des Composants -->
+        <div class="test-section">
+            <h3><i class="bi-puzzle me-2 text-warning"></i>Test des Composants</h3>
+            <p class="text-muted">Testez l'utilisation des composants Blade</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Composant Prix</h5>
+                    <div class="price-example">
+                        <x-price :amount="1500" currency="€" />
+                    </div>
+                    <div class="price-example">
+                        <x-price :amount="2500" currency="$" />
+                    </div>
+                    <div class="price-example">
+                        <x-price :amount="75000" currency="F CFA" />
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Composant Téléphone</h5>
+                    <div class="phone-example">
+                        <x-phone-input name="testPhone" placeholder="Test" :required="false" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="test-section bg-light">
+            <h4><i class="bi-lightbulb me-2"></i>Instructions de Test</h4>
+            <ol>
+                <li><strong>Formatage des Prix :</strong> Tous les montants doivent s'afficher avec des séparateurs de milliers (ex: 1 500 € au lieu de 1500€)</li>
+                <li><strong>Validation des Téléphones :</strong> Les numéros doivent être limités à 10 chiffres et ne contenir que des chiffres</li>
+                <li><strong>Composants :</strong> Vérifiez que les composants <code>&lt;x-price&gt;</code> et <code>&lt;x-phone-input&gt;</code> fonctionnent correctement</li>
+                <li><strong>Responsive :</strong> Testez sur différentes tailles d'écran</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Nos fichiers JavaScript -->
+    <script src="js/price-formatter.js"></script>
+    
+    <script>
+        // Test du formatage des prix
+        function testPriceFormatting() {
+            const prices = document.querySelectorAll('.price-display, .session-price, .cart-total, .checkout-total');
+            let formatted = 0;
+            
+            prices.forEach(price => {
+                if (price.dataset.formatted === 'true') {
+                    formatted++;
+                }
+            });
+            
+            const total = prices.length;
+            alert(`Formatage des prix : ${formatted}/${total} prix formatés avec succès !`);
+        }
+        
+        // Ajouter un prix aléatoire
+        function addRandomPrice() {
+            const randomAmount = Math.floor(Math.random() * 5000) + 100;
+            const container = document.querySelector('.test-section');
+            
+            const newPrice = document.createElement('div');
+            newPrice.className = 'price-example mt-2';
+            newPrice.innerHTML = `
+                <strong>Prix Aléatoire:</strong> <span class="price-display" data-amount="${randomAmount}">${randomAmount} €</span>
+            `;
+            
+            container.appendChild(newPrice);
+            
+            // Formater le nouveau prix
+            setTimeout(() => {
+                if (window.PriceFormatter) {
+                    window.PriceFormatter.formatAllMoneyValues();
+                }
+            }, 100);
+        }
+        
+        // Test de la validation des téléphones
+        function testPhoneValidation() {
+            const phoneInputs = document.querySelectorAll('input[type="tel"]');
+            let valid = 0;
+            
+            phoneInputs.forEach(input => {
+                const value = input.value.replace(/\D/g, '');
+                if (value.length === 10) {
+                    valid++;
+                }
+            });
+            
+            const total = phoneInputs.length;
+            alert(`Validation des téléphones : ${valid}/${total} numéros valides !`);
+        }
+        
+        // Gestion du formulaire de test
+        document.getElementById('phoneTestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const phoneInputs = document.querySelectorAll('input[type="tel"]');
+            let allValid = true;
+            
+            phoneInputs.forEach(input => {
+                const value = input.value.replace(/\D/g, '');
+                if (value.length > 0 && value.length !== 10) {
+                    allValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+            
+            if (allValid) {
+                alert('Tous les numéros de téléphone sont valides ! ✓');
+            } else {
+                alert('Certains numéros de téléphone sont invalides. Vérifiez les champs en rouge. ✗');
+            }
+        });
+        
+        // Afficher un message de bienvenue
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                alert('Bienvenue dans le test du formatage des prix et de la validation des téléphones !\n\nVérifiez que tous les montants sont formatés avec des séparateurs de milliers.');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+
